@@ -83,30 +83,50 @@ def determine_zone(distance_km, lat):
     return zone, distance_km, notes
 
 
+def run_query(address, api_key):
+    lat, lng, formatted = geocode_address(address, api_key)
+    distance = haversine(CITY_HALL_LAT, CITY_HALL_LNG, lat, lng)
+    zone, distance_km, notes = determine_zone(distance, lat)
+
+    print("\n--- RESULT ---")
+    print(f"Address: {formatted}")
+    print(f"Coordinates: {lat}, {lng}")
+    print(f"Distance from City Hall: {distance_km:.2f} km")
+    print(f"Zone: {zone}")
+
+    if notes:
+        print("\nNotes:")
+        for note in notes:
+            print(f"- {note}")
+
+
 def main():
-    try:
-        address = get_address_from_input()
-        api_key = load_api_key()
+    api_key = load_api_key()
 
-        lat, lng, formatted = geocode_address(address, api_key)
+    if len(sys.argv) > 1:
+        # CLI parameter mode — run once
+        try:
+            address = get_address_from_input()
+            run_query(address, api_key)
+        except Exception as e:
+            print(f"Error: {e}")
+    else:
+        # Interactive mode — allow multiple queries
+        while True:
+            try:
+                address = get_address_from_input()
+                if not address.strip():
+                    print("No address entered. Exiting...")
+                    break
+                run_query(address, api_key)
+            except Exception as e:
+                print(f"Error: {e}")
 
-        distance = haversine(CITY_HALL_LAT, CITY_HALL_LNG, lat, lng)
+            again = input("\nDo you want to run another query? (y/n): ").strip().lower()
+            if again != "y":
+                break
 
-        zone, distance_km, notes = determine_zone(distance, lat)
-
-        print("\n--- RESULT ---")
-        print(f"Address: {formatted}")
-        print(f"Coordinates: {lat}, {lng}")
-        print(f"Distance from City Hall: {distance_km:.2f} km")
-        print(f"Zone: {zone}")
-
-        if notes:
-            print("\nNotes:")
-            for note in notes:
-                print(f"- {note}")
-
-    except Exception as e:
-        print(f"Error: {e}")
+        input("\nPress Enter to exit...")
 
 
 if __name__ == "__main__":
