@@ -94,6 +94,19 @@ Your API key is stored locally in `config.cfg` and is excluded from version cont
 
 ---
 
+## 💻 Sample Output
+
+```
+C:\Repo\UnionZoneCalc> python.exe .\zone_calculator.py
+Enter address: 185 Conestoga Drive, Brampton
+
+--- RESULT ---
+Address: 185 Conestoga Dr, Brampton, ON L6Z 2Z7, Canada
+Coordinates: 43.7233218, -79.7906296
+Distance from City Hall: 33.60 km
+Zone: Zone 3
+```
+
 ## 🚀 Future Improvements
 
 - Web interface (Flask/FastAPI)
