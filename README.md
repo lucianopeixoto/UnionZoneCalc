@@ -1,4 +1,4 @@
-# UnionZone
+# UnionZoneCalc
 
 UnionZoneCalc is a simple Python CLI tool that calculates union work zones based on the distance from a City Hall or other landmark. The initial poof of concept version usese the Toronto City Hall and the distances from Local 30 Roofing map.
 
