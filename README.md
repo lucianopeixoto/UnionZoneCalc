@@ -118,4 +118,4 @@ Zone: Zone 3
 
 ## 🧑‍💻 Author
 
-Luciano Carvalho Peixoto
+Luciano Peixoto
