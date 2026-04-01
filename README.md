@@ -27,5 +27,82 @@ It uses the Google Geocoding API to convert addresses into coordinates and appli
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/lucianopeixoto/unionzonecalc.git
-cd unionzonecalc
+git clone https://github.com/yourusername/unionzone.git
+cd unionzone
+```
+
+### 2. Install dependencies
+
+```bash
+pip install requests
+```
+
+### 3. Create config file
+
+Create a file named `config.cfg`:
+
+```ini
+[google]
+api_key=YOUR_API_KEY_HERE
+```
+
+---
+
+## ▶️ Usage
+
+### Option 1: Pass address as argument
+
+```bash
+python zone_calculator.py "185 Conestoga Dr, Brampton"
+```
+
+### Option 2: Interactive mode
+
+```bash
+python zone_calculator.py
+```
+
+---
+
+## 🧠 Special Rules
+
+### Toronto Islands (Zone 2)
+If the distance is between **2.2 km and 3.4 km**, verify manually if the address is on the Toronto Islands.
+
+### South of Lake Ontario
+If the location is south of the lake, it should be considered:
+> **Room & Board**
+
+---
+
+## 📁 Project Structure
+
+```
+unionzone/
+│
+├── zone_calculator.py
+├── config.cfg        # NOT committed (contains API key)
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 🔐 Security
+
+Your API key is stored locally in `config.cfg` and is excluded from version control using `.gitignore`.
+
+---
+
+## 🚀 Future Improvements
+
+- Web interface (Flask/FastAPI)
+- Map visualization
+- Batch processing (CSV input)
+- More precise geographic rules (GIS polygons)
+
+---
+
+## 🧑‍💻 Author
+
+Luciano Carvalho Peixoto
