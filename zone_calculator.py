@@ -18,7 +18,7 @@ def get_address_from_input():
     if len(sys.argv) > 1:
         return " ".join(sys.argv[1:])
     else:
-        return input("Enter address: ")
+        return input("Enter project address: ")
 
 
 def geocode_address(address, api_key):
@@ -74,7 +74,7 @@ def determine_zone(distance_km, lat):
     elif distance_km <= 95:
         zone = "Zone 5"
     else:
-        zone = "Outside defined zones"
+        zone = "Distance > 95Km. Outside defined zones. Room & Board is required."
 
     # Toronto Islands note
     if 2.2 <= distance_km <= 3.4:
