@@ -7,19 +7,16 @@ import math
 CITY_HALL_LAT = 43.65352152565906
 CITY_HALL_LNG = -79.38405043405932
 
-
 def load_api_key():
     config = configparser.ConfigParser()
     config.read("config.cfg")
     return config["google"]["api_key"]
-
 
 def get_address_from_input():
     if len(sys.argv) > 1:
         return " ".join(sys.argv[1:])
     else:
         return input("Enter project address: ")
-
 
 def geocode_address(address, api_key):
     url = f"https://geocode.googleapis.com/v4/geocode/address/{requests.utils.quote(address)}"
@@ -38,7 +35,6 @@ def geocode_address(address, api_key):
     location = data["results"][0]["location"]
     return location["latitude"], location["longitude"], data["results"][0]["formattedAddress"]
 
-
 def haversine(lat1, lon1, lat2, lon2):
     R = 6371  # Earth radius in km
 
@@ -56,9 +52,8 @@ def haversine(lat1, lon1, lat2, lon2):
 
     return R * c
 
-
 def determine_zone(distance_km, lat):
-    notes = []
+    note = []
 
     # Special case: south of Lake Ontario (rough approximation)
     if lat < 43.60:
@@ -67,6 +62,9 @@ def determine_zone(distance_km, lat):
     # Zone logic
     if distance_km <= 20:
         zone = "Zone 1"
+        # Toronto Islands note
+        if 2.2 <= distance_km <= 4.6:
+            note.append("If this location is on Toronto Islands → verify manually for Zone 2")
     elif distance_km <= 50:
         zone = "Zone 3"
     elif distance_km <= 80:
@@ -74,14 +72,10 @@ def determine_zone(distance_km, lat):
     elif distance_km <= 95:
         zone = "Zone 5"
     else:
-        zone = "Distance > 95Km. Outside defined zones. Room & Board is required."
+        zone = "Room & Board" 
+        note.append("Distance > 95Km. Outside defined zones. Room & Board is required.")
 
-    # Toronto Islands note
-    if 2.2 <= distance_km <= 3.4:
-        notes.append("If this location is on Toronto Islands → verify manually for Zone 2")
-
-    return zone, distance_km, notes
-
+    return zone, distance_km, note
 
 def run_query(address, api_key):
     lat, lng, formatted = geocode_address(address, api_key)
@@ -98,7 +92,6 @@ def run_query(address, api_key):
         print("\nNotes:")
         for note in notes:
             print(f"- {note}")
-
 
 def main():
     api_key = load_api_key()
@@ -127,7 +120,6 @@ def main():
                 break
 
         input("\nPress Enter to exit...")
-
 
 if __name__ == "__main__":
     main()
