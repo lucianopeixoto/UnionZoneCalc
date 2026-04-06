@@ -56,7 +56,7 @@ def determine_zone(distance_km, lat):
     note = []
 
     # Special case: south of Lake Ontario (rough approximation)
-    if lat < 43.60:
+    if lat < 43.2504115022465:
         return "Room & Board", distance_km, ["Location appears south of Lake Ontario → Treat as Room & Board"]
 
     # Zone logic
