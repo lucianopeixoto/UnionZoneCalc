@@ -110,9 +110,87 @@ Zone: Zone 3
 ## 🚀 Future Improvements
 
 - Web interface (Flask/FastAPI)
-- Map visualization
+- Map visualization (? Maybe)
 - Batch processing (CSV input)
-- More precise geographic rules (GIS polygons)
+- More precise geographic rules (GIS polygons TBD)
+- Generate PDF Instructions on how to use the app
+
+## Build Executable (Windows)
+
+You can package the app into a standalone `.exe` so users don’t need Python installed.
+
+### 1. Install PyInstaller
+
+```
+pip install pyinstaller
+```
+
+If you have multiple Python versions, use:
+
+```
+python -m pip install pyinstaller
+```
+
+---
+
+### 2. Build the executable
+
+```
+python -m PyInstaller --onefile zone_calculator.py
+```
+
+Optional (with custom icon):
+
+```
+python -m PyInstaller --onefile --icon=app.ico zone_calculator.py
+```
+
+Optional (custom name):
+
+```
+python -m PyInstaller --onefile --name UnionZoneCalc zone_calculator.py
+```
+
+---
+
+### 3. Output
+
+After building, the executable will be located in:
+
+```
+dist/zone_calculator.exe
+```
+
+Or (if using custom name):
+
+```
+dist/UnionZoneCalc.exe
+```
+
+---
+
+### 4. Important Notes
+
+- The file `config.cfg` must be in the same folder as the `.exe`
+- First run may be slightly slower (normal for PyInstaller)
+- Windows Defender may show a warning for unsigned executables (common for internal tools)
+
+---
+
+### 5. Usage (EXE)
+
+Run with address parameter:
+
+```
+UnionZoneCalc.exe "185 Conestoga Dr, Brampton"
+```
+
+Or run without parameters for interactive mode:
+
+```
+UnionZoneCalc.exe
+```
+
 
 ---
 
