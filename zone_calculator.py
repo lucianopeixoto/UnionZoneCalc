@@ -1,3 +1,5 @@
+import argparse
+import json
 import sys
 import requests
 import configparser
@@ -17,6 +19,15 @@ def get_address_from_input():
         return " ".join(sys.argv[1:])
     else:
         return input("Enter project address: ")
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Union Zone Calculator")
+    parser.add_argument("address", nargs="*", help="Project address")
+    parser.add_argument("-j", "--json", action="store_true", dest="json_output",
+                        help="Print result as JSON for machine consumption")
+    return parser.parse_args()
+
 
 def geocode_address(address, api_key):
     url = f"https://geocode.googleapis.com/v4/geocode/address/{requests.utils.quote(address)}"
@@ -77,10 +88,24 @@ def determine_zone(distance_km, lat):
 
     return zone, distance_km, note
 
-def run_query(address, api_key):
+def run_query(address, api_key, json_output=False):
     lat, lng, formatted = geocode_address(address, api_key)
     distance = haversine(CITY_HALL_LAT, CITY_HALL_LNG, lat, lng)
     zone, distance_km, notes = determine_zone(distance, lat)
+
+    if json_output:
+        result = {
+            "address": formatted,
+            "coordinates": {
+                "latitude": lat,
+                "longitude": lng,
+            },
+            "distance_km": round(distance_km, 2),
+            "zone": zone,
+            "notes": notes,
+        }
+        print(json.dumps(result, ensure_ascii=False))
+        return
 
     print("\n--- RESULT ---")
     print(f"Address: {formatted}")
@@ -95,13 +120,16 @@ def run_query(address, api_key):
 
 def main():
     api_key = load_api_key()
+    args = parse_args()
 
-    if len(sys.argv) > 1:
-        # CLI parameter mode — run once
+    if args.address:
+        address = " ".join(args.address)
         try:
-            address = get_address_from_input()
-            run_query(address, api_key)
+            run_query(address, api_key, json_output=args.json_output)
         except Exception as e:
+            if args.json_output:
+                print(json.dumps({"error": str(e)}), file=sys.stdout)
+                sys.exit(1)
             print(f"Error: {e}")
     else:
         # Interactive mode — allow multiple queries
